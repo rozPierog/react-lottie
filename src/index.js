@@ -31,6 +31,7 @@ export default class Lottie extends React.Component {
 
     this.anim = lottie.loadAnimation(this.options);
     this.registerEvents(eventListeners);
+    showEnd();
   }
 
   componentWillUpdate(nextProps /* , nextState */) {
@@ -66,6 +67,12 @@ export default class Lottie extends React.Component {
     this.anim = null;
   }
 
+  showEnd() {
+    if (this.anim.totalFrames && this.props.showEnd) {
+      this.anim.goToAndStop(this.anim.totalFrames - 1, true)
+    }
+  }
+
   setSpeed() {
     this.anim.setSpeed(this.props.speed);
   }
@@ -93,14 +100,6 @@ export default class Lottie extends React.Component {
       this.anim.pause();
     }
   }
-
-  progress() {
-    if (this.props.progress) {
-      let newFrame = this.anim.totalFrames*this.props.progress
-      this.anim.goToAndStop(newFrame, true)
-    }
-  }
-  
 
   destroy() {
     this.anim.destroy();
@@ -180,7 +179,7 @@ export default class Lottie extends React.Component {
 }
 
 Lottie.propTypes = {
-  progress: PropTypes.number,
+  showEnd: PropTypes.bool,
   eventListeners: PropTypes.arrayOf(PropTypes.object),
   options: PropTypes.object.isRequired,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
